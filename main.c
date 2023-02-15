@@ -78,7 +78,7 @@ int sh_evaluate(char **tokens) {
 		execvp(tokens[0], tokens);
 		perror(tokens[0]);  // execvp only returns on error
 		exit(EXIT_FAILURE);
-	} else if (pid == -1) {
+	} else if (pid < 0) {
 		// error
 		sh_fatal();
 	} else {
