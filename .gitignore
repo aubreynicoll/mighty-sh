@@ -51,5 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# VS Code
+.vscode
+
 # Default program name
 main
