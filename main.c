@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define SH_LINE_PROMPT	  "mighty-shell>"
+#define SH_LINE_PROMPT	  "mighty-shell> "
 #define SH_TOK_BUFSIZE	  1024
 #define SH_TOK_DELIMITERS " \n\t\f\r\v"
 
@@ -86,25 +86,27 @@ int sh_evaluate(char **tokens) {
 		sh_fatal();
 	} else {
 		// parent
-		waitpid(pid, NULL, 0);
+		int wstatus;
+		do {
+			waitpid(pid, &wstatus, WUNTRACED);
+		} while (!(WIFEXITED(wstatus) || WIFSIGNALED(wstatus)));
 	}
 
 	return 0;
 }
 
 int sh_repl(void) {
-	for (;;) {
+	int status = 0;
+	do {
 		sh_print_prompt();
 		char  *line = sh_read_line();
 		char **tokens = sh_parse_tokens(line);
-		int    status = sh_evaluate(tokens);
+		status = sh_evaluate(tokens);
 		free(tokens);
 		free(line);
+	} while (!status);
 
-		if (status) {
-			return status;
-		}
-	}
+	return status;
 }
 
 int main(void) {
