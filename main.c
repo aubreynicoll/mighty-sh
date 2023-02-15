@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 #define SH_LINE_PROMPT	  "mighty-shell>"
-#define SH_TOK_BUFSIZE	  32
+#define SH_TOK_BUFSIZE	  1024
 #define SH_TOK_DELIMITERS " \n\t\f\r\v"
 
 void   sh_fatal(void);
@@ -56,6 +56,8 @@ char **sh_parse_tokens(char *line) {
 
 	token = strtok(line, SH_TOK_DELIMITERS);
 	while (token) {
+		tokens[i++] = token;
+
 		if (i == tokens_len) {
 			tokens_len *= 2;
 			tokens = realloc(tokens, tokens_len);
@@ -64,9 +66,10 @@ char **sh_parse_tokens(char *line) {
 			}
 		}
 
-		tokens[i++] = token;
 		token = strtok(NULL, SH_TOK_DELIMITERS);
 	}
+
+	tokens[i] = NULL;
 
 	return tokens;
 }
