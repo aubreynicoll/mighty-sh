@@ -1,5 +1,4 @@
 P := main
-OBJECTS := $(P).o
 CC := gcc
 CFLAGS := -I$(HOME)/local/include -fms-extensions -Wall -Wextra
 LDFLAGS := -L$(HOME)/local/lib
@@ -19,7 +18,7 @@ ifeq ($(ENABLE_GPROF), 1)
 endif
 
 
-$(P): $(OBJECTS)
+$(P): $(patsubst %.c,%.o,$(wildcard *.c))
 
 clean:
 	rm -rf $(P) *.o
