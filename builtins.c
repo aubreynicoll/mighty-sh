@@ -1,5 +1,6 @@
 #include "builtins.h"
 
+#include "error.h"
 #include "libc.h"
 #include "repl.h"
 #include "util.h"
@@ -27,7 +28,7 @@ static int sh_cd(char **args) {
 
 	int status = chdir(dir);
 	if (status < 0) {
-		perror("cd");
+		sh_error("cd");
 	}
 
 	return SH_REPL_CONTINUE;
