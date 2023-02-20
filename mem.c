@@ -6,7 +6,7 @@
 void *sh_malloc(size_t size) {
 	void *ptr = malloc(size);
 	if (!ptr) {
-		sh_fatal_error();
+		sh_fatal_error(NULL);
 	}
 	return ptr;
 }
@@ -14,7 +14,7 @@ void *sh_malloc(size_t size) {
 void *sh_realloc(void *ptr, size_t size) {
 	void *new_ptr = realloc(ptr, size);
 	if (!new_ptr) {
-		sh_fatal_error();
+		sh_fatal_error(NULL);
 	}
 	return new_ptr;
 }

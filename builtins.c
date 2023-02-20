@@ -2,6 +2,7 @@
 
 #include "libc.h"
 #include "repl.h"
+#include "util.h"
 
 typedef struct builtin_desc_s builtin_desc_t;
 struct builtin_desc_s {
@@ -32,7 +33,7 @@ static int sh_cd(char **args) {
 	return SH_REPL_CONTINUE;
 }
 
-static int sh_help(char **args) {
+static int sh_help(char **args unused) {
 	printf(
 	    "Mighty Shell! by Aubrey Nicoll\n"
 	    "\n"
@@ -45,7 +46,7 @@ static int sh_help(char **args) {
 	return SH_REPL_CONTINUE;
 }
 
-static int sh_exit(char **args) {
+static int sh_exit(char **args unused) {
 	return SH_REPL_EXIT;
 }
 

@@ -7,19 +7,19 @@
 #include "mem.h"
 #include "parser.h"
 
-static sh_exec(char **args);
-static sh_evaluate(char **args);
+static int sh_exec(char **args);
+static int sh_evaluate(char **args);
 
-static sh_exec(char **args) {
+static int sh_exec(char **args) {
 	int pid = fork();
+	if (pid < 0) {
+		sh_fatal_error(NULL);
+	}
+
 	if (pid == 0) {
 		// child
 		execvp(args[0], args);
-		perror(args[0]);  // execvp only returns on error
-		exit(EXIT_FAILURE);
-	} else if (pid < 0) {
-		// error
-		sh_fatal_error();
+		sh_fatal_error(NULL);  // execvp only returns on error
 	} else {
 		// parent
 		int wstatus;
