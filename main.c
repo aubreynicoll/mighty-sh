@@ -1,9 +1,6 @@
-#include "main.h"
-
+#include "config.h"
 #include "repl.h"
 #include "util.h"
-
-config_t sh_config;
 
 int main(int argc unused, char **argv) {
 	/* initialization */

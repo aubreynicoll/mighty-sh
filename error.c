@@ -1,7 +1,7 @@
 #include "error.h"
 
+#include "config.h"
 #include "libc.h"
-#include "main.h"
 
 void sh_error(char *message) {
 	message = message ? message : sh_config.shell_name;
