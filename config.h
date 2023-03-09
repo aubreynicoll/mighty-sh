@@ -4,3 +4,5 @@ struct config_t {
 };
 
 extern config_t sh_config;
+
+void sh_init_config(int argc, char **argv);
