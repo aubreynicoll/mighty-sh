@@ -28,7 +28,7 @@ static int sh_cd(char **args) {
 
 	int status = chdir(dir);
 	if (status < 0) {
-		sh_error("cd");
+		sh_unix_error("cd");
 	}
 
 	return SH_REPL_CONTINUE;

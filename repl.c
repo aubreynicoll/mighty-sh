@@ -13,13 +13,13 @@ static int sh_evaluate(char **args);
 static int sh_exec(char **args) {
 	int pid = fork();
 	if (pid < 0) {
-		sh_fatal_error(NULL);
+		sh_fatal_unix_error(NULL);
 	}
 
 	if (pid == 0) {
 		// child
 		execvp(args[0], args);
-		sh_fatal_error(NULL);  // execvp only returns on error
+		sh_fatal_unix_error(NULL);  // execvp only returns on error
 	} else {
 		// parent
 		int wstatus;

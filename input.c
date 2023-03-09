@@ -20,7 +20,7 @@ char *sh_read_line(void) {
 			exit(EXIT_SUCCESS);
 		}
 
-		sh_fatal_error(NULL);
+		sh_fatal_unix_error(NULL);
 	}
 
 	return line;
