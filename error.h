@@ -1,3 +1,6 @@
+#ifndef __SH_ERROR_INCLUDED__
+#define __SH_ERROR_INCLUDED__
+
 #include <stdlib.h>
 
 #define sh_error(...) \
@@ -11,3 +14,5 @@
 
 void sh_unix_error(char *message);
 void sh_fatal_unix_error(char *message);
+
+#endif

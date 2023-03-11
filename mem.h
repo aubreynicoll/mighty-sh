@@ -1,3 +1,6 @@
+#ifndef __SH_MEM_INCLUDED__
+#define __SH_MEM_INCLUDED__
+
 #include <stddef.h>
 
 #define sh_free_all(...)                                        \
@@ -12,3 +15,5 @@
 void *sh_malloc(size_t size);
 void *sh_realloc(void *ptr, size_t size);
 void  sh_free(void *ptr);
+
+#endif
