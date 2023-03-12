@@ -8,7 +8,7 @@ LDLIBS :=
 ifeq ($(BUILD_PROFILE), release)
 	CFLAGS := $(CFLAGS) -O3 -Werror
 else
-	CFLAGS := $(CFLAGS) -g -Og
+	CFLAGS := $(CFLAGS) -g -Og -DDEBUG_MODE
 endif
 
 

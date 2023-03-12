@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+#include "util.h"
+
 #define sh_error(...) \
 	{ fprintf(stderr, __VA_ARGS__); }
 
@@ -12,7 +14,7 @@
 		exit(EXIT_FAILURE);           \
 	}
 
-void sh_unix_error(char *message);
-void sh_fatal_unix_error(char *message);
+void	      sh_unix_error(char *message);
+noreturn void sh_fatal_unix_error(char *message);
 
 #endif
