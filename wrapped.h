@@ -11,6 +11,8 @@
 #include <signal.h>
 #include <sys/types.h>
 
+#include "util.h"
+
 sig_t sh_signal(int signum, sig_t handler);
 
 int sh_setpgid(pid_t pid, pid_t pgid);
@@ -22,7 +24,7 @@ int sh_kill(pid_t pid, int sig);
 
 pid_t sh_fork(void);
 
-int sh_execvp(const char *file, char *const argv[]);
+noreturn int sh_execvp(const char *file, char *const argv[]);
 
 pid_t sh_waitpid(pid_t pid, int *wstatus, int options);
 
