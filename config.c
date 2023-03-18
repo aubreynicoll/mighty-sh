@@ -28,7 +28,8 @@ void sh_init_config(int argc unused, char **argv) {
 		sh_setpgid(0, 0);
 		sh_config.shell_pgid = getpid();
 
-		/* take control of terminal */
+		/* take control of terminal & save terminal modes */
 		sh_tcsetpgrp(sh_config.shell_terminal, sh_config.shell_pgid);
+		sh_tcgetattr(sh_config.shell_terminal, &sh_config.shell_tmodes);
 	}
 }

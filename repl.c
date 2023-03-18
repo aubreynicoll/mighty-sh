@@ -55,8 +55,12 @@ static int sh_launch_job(char **args) {
 		} while (!(WIFEXITED(wstatus) || WIFSIGNALED(wstatus)));
 
 		if (sh_config.shell_is_interactive) {
+			/* set shell pgid as foreground and restore shell
+			 * terminal modes */
 			sh_tcsetpgrp(sh_config.shell_terminal,
 				     sh_config.shell_pgid);
+			sh_tcsetattr(sh_config.shell_terminal, TCSADRAIN,
+				     &sh_config.shell_tmodes);
 		}
 	}
 

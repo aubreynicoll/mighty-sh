@@ -2,7 +2,7 @@
  * The functions contained within die on ANY error
  *
  * Used for general purpose sys calls, other such wrapped functions may exist
- * elsewhere if they are a bit more signicant (e.g. malloc)
+ * elsewhere if they are a bit more significant (e.g. malloc)
  */
 
 #ifndef __SH_WRAPPED_INCLUDED__
@@ -10,6 +10,7 @@
 
 #include <signal.h>
 #include <sys/types.h>
+#include <termios.h>
 
 #include "util.h"
 
@@ -19,6 +20,8 @@ int sh_setpgid(pid_t pid, pid_t pgid);
 
 pid_t sh_tcgetpgrp(int fd);
 int   sh_tcsetpgrp(int fd, pid_t pgrp);
+int   sh_tcgetattr(int fd, struct termios *tp);
+int   sh_tcsetattr(int fd, int options, const struct termios *tp);
 
 int sh_kill(pid_t pid, int sig);
 

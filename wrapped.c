@@ -36,6 +36,22 @@ int sh_tcsetpgrp(int fd, pid_t pgrp) {
 	return ret;
 }
 
+int sh_tcgetattr(int fd, struct termios *tp) {
+	int ret = tcgetattr(fd, tp);
+	if (ret < 0) {
+		sh_fatal_unix_error("tcgetattr");
+	}
+	return ret;
+}
+
+int sh_tcsetattr(int fd, int options, const struct termios *tp) {
+	int ret = tcsetattr(fd, options, tp);
+	if (ret < 0) {
+		sh_fatal_unix_error("tcsetattr");
+	}
+	return ret;
+}
+
 int sh_kill(pid_t pid, int sig) {
 	int ret = kill(pid, sig);
 	if (ret < 0) {
