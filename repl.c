@@ -4,6 +4,7 @@
 #include "config.h"
 #include "error.h"
 #include "input.h"
+#include "job.h"
 #include "libc.h"
 #include "logger.h"
 #include "mem.h"
@@ -11,10 +12,10 @@
 #include "signal.h"
 #include "wrapped.h"
 
-static int sh_launch_job(char **args);
-static int sh_evaluate(char **args);
+static int sh_launch_job(job_t *job);
+static int sh_evaluate(command_t *args);
 
-static int sh_launch_job(char **args) {
+static int sh_launch_job(job_t *job) {
 	int pid = sh_fork();
 
 	if (pid == 0) {
@@ -29,9 +30,11 @@ static int sh_launch_job(char **args) {
 				       SIGTTOU, SIGCHLD);
 		}
 
-		sh_execvp(args[0], args);
+		sh_execvp(job->cmd->argv[0], job->cmd->argv);
 	} else {
 		// parent
+		job->pid = pid;
+		job->status = RUNNING;
 
 		/* according to Kerrisk and GNU libc manual, parent should also
 		 * attempt to set child's pgid & set as foreground process of
@@ -42,17 +45,19 @@ static int sh_launch_job(char **args) {
 				sh_fatal_unix_error(NULL);
 			}
 
+			job->pgid = pid;
+
 			sh_tcsetpgrp(sh_config.shell_terminal, pid);
+		} else {
+			job->pgid = sh_config.shell_pgid;
 		}
 
-		int wstatus;
+		sh_wait_for_job(job);
 
-		/* the following loop doesn't yet handle ctrl-z (SIGTSTP) very
-		   well, and needs another process to send it SIGCONT.
+		/* clearing the job here feels a little gross, but until further
+		 * refactors that deal with background jobs it will have to do.
 		 */
-		do {
-			sh_waitpid(pid, &wstatus, WUNTRACED | WCONTINUED);
-		} while (!(WIFEXITED(wstatus) || WIFSIGNALED(wstatus)));
+		sh_free_job(job);
 
 		if (sh_config.shell_is_interactive) {
 			/* set shell pgid as foreground and restore shell
@@ -67,26 +72,33 @@ static int sh_launch_job(char **args) {
 	return SH_REPL_CONTINUE;
 }
 
-static int sh_evaluate(char **args) {
-	if (args[0] == NULL) {
+static int sh_evaluate(command_t *cmd) {
+	if (cmd->argv[0] == NULL) {
+		/* user entered an empty line */
 		return SH_REPL_CONTINUE;
 	}
 
-	builtin_t builtin = sh_get_builtin(args[0]);
+	builtin_t builtin = sh_get_builtin(cmd->argv[0]);
 	if (builtin) {
-		return builtin(args);
+		return builtin(cmd->argv);
 	}
-	return sh_launch_job(args);
+
+	job_t *job = sh_new_job(cmd);
+	if (!job) {
+		/* probably hit max jobs */
+		return SH_REPL_CONTINUE;
+	}
+
+	return sh_launch_job(job);
 }
 
 int sh_repl(void) {
 	int status = 0;
 	do {
 		sh_print_prompt();
-		char  *line = sh_read_line();
-		char **tokens = sh_parse_tokens(line);
-		status = sh_evaluate(tokens);
-		sh_free_all(tokens, line);
+		char	  *line = sh_read_line();
+		command_t *cmd = sh_new_command(line);
+		status = sh_evaluate(cmd);
 	} while (status == SH_REPL_CONTINUE);
 
 	return status;

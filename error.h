@@ -1,6 +1,7 @@
 #ifndef __SH_ERROR_INCLUDED__
 #define __SH_ERROR_INCLUDED__
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "util.h"
