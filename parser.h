@@ -3,7 +3,7 @@
 
 typedef struct command_t {
 	/* the original line, used for displaying to the user */
-	char  *cmd;
+	char  *line;
 	/* a copy of the line used for tokenizing, which is mangled and useless
 	 * on its own */
 	char  *dup;

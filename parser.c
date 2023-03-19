@@ -13,11 +13,11 @@ command_t *sh_new_command(char *line) {
 	size_t i = 0;
 
 	command_t *cmd = sh_malloc(sizeof(command_t));
-	cmd->cmd = line;
-	cmd->dup = sh_strdup(cmd->cmd);
+	cmd->line = line;
+	cmd->dup = sh_strdup(cmd->line);
 	cmd->argv = sh_malloc(tokens_len * sizeof(char *));
 
-	char *token = strtok(line, SH_TOK_DELIMITERS);
+	char *token = strtok(cmd->dup, SH_TOK_DELIMITERS);
 	while (token) {
 		cmd->argv[i++] = token;
 
@@ -36,5 +36,5 @@ command_t *sh_new_command(char *line) {
 }
 
 void sh_free_command(command_t *cmd) {
-	sh_free_all(cmd->cmd, cmd->dup, cmd->argv, cmd);
+	sh_free_all(cmd->line, cmd->dup, cmd->argv, cmd);
 }
