@@ -10,6 +10,8 @@ typedef struct command_t {
 	/* NULL-terminated array of token pointers, used for evaluating the
 	 * command */
 	char **argv;
+	/* initialize job in background */
+	int    bg;
 } command_t;
 
 /**

@@ -75,7 +75,7 @@ noreturn int sh_execvp(const char *file, char *const argv[]) {
 
 pid_t sh_waitpid(pid_t pid, int *wstatus, int options) {
 	pid_t ret = waitpid(pid, wstatus, options);
-	if (ret < 0) {
+	if (ret < 0 && errno != ECHILD) {
 		sh_fatal_unix_error("waitpid");
 	}
 	return ret;

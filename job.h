@@ -36,26 +36,18 @@ void sh_free_job(job_t *job);
 job_t *sh_find_job_pid(pid_t pid);
 
 /**
- * Called in conjuction with waitpid, the status passed to this function should
- * be the returned wait_status from waitpid
- */
-int sh_update_job_status(job_t *job, int wstatus);
-
-/**
  * wait for the job until stopped or exited
  */
 void sh_wait_for_job(job_t *job);
 
-/**
- * exhaustively check background jobs until no processes
- * ready to report
- */
-void sh_check_bg_jobs(void);
+void sh_print_job_info(job_t *job);
 
-// TODO
-void sh_set_job_bg(job_t *job);
+void sh_print_jobs(void);
 
-// TODO
-void sh_set_job_fg(job_t *job);
+void sh_do_job_notifications(void);
+
+void sh_move_job_bg(job_t *job, int continue_job);
+
+void sh_move_job_fg(job_t *job, int continue_job);
 
 #endif

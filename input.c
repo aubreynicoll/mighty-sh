@@ -25,3 +25,17 @@ char *sh_read_line(void) {
 
 	return line;
 }
+
+LongResult sh_get_long(char *str) {
+	char *endptr;
+
+	errno = 0;
+
+	long value = strtol(str, &endptr, 0);
+
+	if (errno != 0 || str == endptr) {
+		return (LongResult){.err = 1};
+	}
+
+	return (LongResult){.ok = value};
+}

@@ -16,6 +16,7 @@ command_t *sh_new_command(char *line) {
 	cmd->line = line;
 	cmd->dup = sh_strdup(cmd->line);
 	cmd->argv = sh_malloc(tokens_len * sizeof(char *));
+	cmd->bg = 0;
 
 	char *token = strtok(cmd->dup, SH_TOK_DELIMITERS);
 	while (token) {

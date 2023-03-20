@@ -1,5 +1,6 @@
 /**
- * The functions contained within die on ANY error
+ * The functions contained within die on ANY error, with very few exceptions to
+ * that rule.
  *
  * Used for general purpose sys calls, other such wrapped functions may exist
  * elsewhere if they are a bit more significant (e.g. malloc)
