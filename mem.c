@@ -1,7 +1,6 @@
 #include "mem.h"
 
-#include <string.h>
-
+#include "config.h"
 #include "error.h"
 #include "libc.h"
 
@@ -13,16 +12,26 @@ char *sh_strdup(const char *str) {
 	return dup;
 }
 
-void *sh_malloc(size_t size) {
-	void *ptr = malloc(size);
+void *sh_malloc(size_t n, size_t size) {
+	if (size && SIZE_MAX / size < n) {
+		sh_fatal_error("%s: overflowed during allocation\n",
+			       sh_config.shell_name);
+	}
+
+	void *ptr = malloc(n * size);
 	if (!ptr) {
 		sh_fatal_unix_error(NULL);
 	}
 	return ptr;
 }
 
-void *sh_realloc(void *ptr, size_t size) {
-	void *new_ptr = realloc(ptr, size);
+void *sh_realloc(void *ptr, size_t n, size_t size) {
+	if (size && SIZE_MAX / size < n) {
+		sh_fatal_error("%s: overflowed during allocation\n",
+			       sh_config.shell_name);
+	}
+
+	void *new_ptr = realloc(ptr, n * size);
 	if (!new_ptr) {
 		sh_fatal_unix_error(NULL);
 	}

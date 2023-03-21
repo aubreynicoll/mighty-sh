@@ -13,7 +13,7 @@
 #include "wrapped.h"
 
 static int sh_launch_job(job_t *job);
-static int sh_evaluate(command_t *args);
+static int sh_evaluate(command_t *cmd);
 
 static int sh_launch_job(job_t *job) {
 	int pid = sh_fork();
@@ -70,11 +70,13 @@ static int sh_evaluate(command_t *cmd) {
 		return SH_REPL_CONTINUE;
 	}
 
+	/* run as builtin if found */
 	builtin_t builtin = sh_get_builtin(cmd->argv[0]);
 	if (builtin) {
 		return builtin(cmd->argv);
 	}
 
+	/* else create & launch job */
 	job_t *job = sh_new_job(cmd);
 	if (!job) {
 		/* probably hit max jobs */

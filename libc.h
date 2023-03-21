@@ -2,6 +2,8 @@
 #define __SH_LIBC_INCLUDED__
 
 #include <errno.h>
+#include <limits.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

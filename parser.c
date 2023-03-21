@@ -12,10 +12,10 @@ command_t *sh_new_command(char *line) {
 	size_t tokens_len = SH_TOK_BUFSIZE;
 	size_t i = 0;
 
-	command_t *cmd = sh_malloc(sizeof(command_t));
+	command_t *cmd = sh_malloc(1, sizeof(command_t));
 	cmd->line = line;
 	cmd->dup = sh_strdup(cmd->line);
-	cmd->argv = sh_malloc(tokens_len * sizeof(char *));
+	cmd->argv = sh_malloc(tokens_len, sizeof(char *));
 	cmd->bg = 0;
 
 	char *token = strtok(cmd->dup, SH_TOK_DELIMITERS);
@@ -25,7 +25,7 @@ command_t *sh_new_command(char *line) {
 		if (i == tokens_len) {
 			tokens_len *= 2;
 			cmd->argv =
-			    sh_realloc(cmd->argv, tokens_len * sizeof(char *));
+			    sh_realloc(cmd->argv, tokens_len, sizeof(char *));
 		}
 
 		token = strtok(NULL, SH_TOK_DELIMITERS);
