@@ -3,27 +3,37 @@
 #include "libc.h"
 #include "mem.h"
 
-char **sh_parse_tokens(char *line) {
-	char **tokens;
+#define SH_TOK_BUFSIZE	  16
+#define SH_TOK_DELIMITERS " \n\t\f\r\v"
+
+command_t *sh_new_command(char *line) {
 	size_t tokens_len = SH_TOK_BUFSIZE;
 	size_t i = 0;
 
-	tokens = sh_malloc(tokens_len * sizeof(char *));
+	command_t *cmd = sh_malloc(1, sizeof(command_t));
+	cmd->line = line;
+	cmd->dup = sh_strdup(cmd->line);
+	cmd->argv = sh_malloc(tokens_len, sizeof(char *));
+	cmd->bg = 0;
 
-	char *token = strtok(line, SH_TOK_DELIMITERS);
+	char *token = strtok(cmd->dup, SH_TOK_DELIMITERS);
 	while (token) {
-		tokens[i++] = token;
+		cmd->argv[i++] = token;
 
 		if (i == tokens_len) {
 			tokens_len *= 2;
-			tokens =
-			    sh_realloc(tokens, tokens_len * sizeof(char *));
+			cmd->argv =
+			    sh_realloc(cmd->argv, tokens_len, sizeof(char *));
 		}
 
 		token = strtok(NULL, SH_TOK_DELIMITERS);
 	}
 
-	tokens[i] = NULL;
+	cmd->argv[i] = NULL;
 
-	return tokens;
+	return cmd;
+}
+
+void sh_free_command(command_t *cmd) {
+	sh_free_all(cmd->line, cmd->dup, cmd->argv, cmd);
 }

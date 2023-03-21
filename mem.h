@@ -12,8 +12,9 @@
 		}                                               \
 	}
 
-void *sh_malloc(size_t size);
-void *sh_realloc(void *ptr, size_t size);
+char *sh_strdup(const char *str);
+void *sh_malloc(size_t n, size_t size);
+void *sh_realloc(void *ptr, size_t n, size_t size);
 void  sh_free(void *ptr);
 
 #endif
