@@ -1,7 +1,5 @@
 #include "parser.h"
 
-#include <string.h>
-
 #include "libc.h"
 #include "mem.h"
 

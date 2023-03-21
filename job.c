@@ -25,8 +25,7 @@ job_t *sh_new_job(command_t *cmd) {
 	}
 
 	job_t *job = &jobs[jobs_size];
-	job->cmd = cmd;
-	job->tmodes = sh_config.shell_tmodes;
+	*job = (job_t){.cmd = cmd, .tmodes = sh_config.shell_tmodes};
 
 	++jobs_size;
 
