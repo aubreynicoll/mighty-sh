@@ -26,6 +26,7 @@ Also, I'm not shooting for complete POSIX compliance or anything like that. Keep
 - Use GNU Readline library. This is the lib that Bash uses, and it's my understanding that it was basically developed alongside Bash. Using it should allow for a much happier command line experience
 - History. Useful for obvious reasons.
 - Tab completion. Also a very nice thing to have.
+- Asynchronous job control using signal handlers. As of now, checking on background jobs is done at the top of the repl; however, it could be done in a SIGCHLD handler. Although part of me does appreciate the simplicity of keeping it sync.
 
 ### Don't want
 - While I mentioned better parsing above, I'm not sure I will ever try to make this thing fully standards compliant.
