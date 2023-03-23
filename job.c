@@ -158,6 +158,8 @@ void sh_move_job_bg(job_t *job, int continue_job) {
 	if (continue_job) {
 		sh_continue_job(job);
 	}
+
+	sh_print_job_info(job);
 }
 
 void sh_move_job_fg(job_t *job, int continue_job) {
@@ -168,6 +170,7 @@ void sh_move_job_fg(job_t *job, int continue_job) {
 		/* restore terminal modes when continuing job */
 		sh_tcsetattr(sh_config.shell_terminal, TCSADRAIN, &job->tmodes);
 		sh_continue_job(job);
+		sh_print_job_info(job);
 	}
 
 	/* wait for STOPPED or EXITED */

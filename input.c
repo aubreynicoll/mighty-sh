@@ -3,6 +3,8 @@
 #include "error.h"
 #include "libc.h"
 
+#define SH_LINE_PROMPT "mighty-shell> "
+
 void sh_print_prompt(void) {
 	printf(SH_LINE_PROMPT);
 	fflush(stdout);

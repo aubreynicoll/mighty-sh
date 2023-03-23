@@ -18,7 +18,7 @@ typedef struct command_t {
  * Assumes ownership of its arguments.
  *
  * This function returns a malloc'd command_t that must be freed by the
- * accompanying function.
+ * accompanying function. If the line contains no tokens, it returns NULL.
  */
 command_t *sh_new_command(char *line);
 

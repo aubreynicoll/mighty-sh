@@ -13,7 +13,7 @@ Also, I'm not shooting for complete POSIX compliance or anything like that. Keep
 - [x] implement a repl
 - [x] read a simple command, launch a foreground job to completion
 - [x] implement job control
-- [ ] launch job to background (e.g. '\<cmd> \<args> &')
+- [x] launch job to background (e.g. '\<cmd> \<args> &')
 - [ ] run scripts (non-interactive shell)
 - [ ] export variables to the environment (export builtin)
 - [ ] pipes

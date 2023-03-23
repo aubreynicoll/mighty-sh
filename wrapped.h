@@ -30,6 +30,8 @@ pid_t sh_fork(void);
 
 noreturn int sh_execvp(const char *file, char *const argv[]);
 
+/* error-checked waitpid wrapper. this function does NOT fail on ECHILD errors.
+ */
 pid_t sh_waitpid(pid_t pid, int *wstatus, int options);
 
 #endif
