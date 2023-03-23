@@ -24,6 +24,8 @@ static void sh_evaluate(command_t *cmd) {
 	builtin_t builtin = sh_get_builtin(cmd->argv[0]);
 	if (builtin) {
 		builtin(cmd->argv);
+		/* builtins don't get turned into jobs, so we need to clean up
+		 * memory here */
 		sh_free_command(cmd);
 		return;
 	}
@@ -41,8 +43,14 @@ void sh_repl(void) {
 	for (;;) {
 		sh_do_job_notifications();
 		sh_print_prompt();
+
 		char	  *line = sh_read_line();
 		command_t *cmd = sh_new_command(line);
+
+		if (!cmd) {
+			continue;
+		}
+
 		sh_evaluate(cmd);
 	}
 }

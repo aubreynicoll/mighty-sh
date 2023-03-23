@@ -11,10 +11,9 @@ command_t *sh_new_command(char *line) {
 	size_t i = 0;
 
 	command_t *cmd = sh_malloc(1, sizeof(command_t));
-	cmd->line = line;
-	cmd->dup = sh_strdup(cmd->line);
-	cmd->argv = sh_malloc(tokens_len, sizeof(char *));
-	cmd->bg = 0;
+	*cmd = (command_t){.line = line,
+			   .dup = sh_strdup(line),
+			   .argv = sh_malloc(tokens_len, sizeof(char *))};
 
 	char *token = strtok(cmd->dup, SH_TOK_DELIMITERS);
 	while (token) {
@@ -29,18 +28,18 @@ command_t *sh_new_command(char *line) {
 		token = strtok(NULL, SH_TOK_DELIMITERS);
 	}
 
-	if (i == 0) {
-		/* no tokens: cleanup and return NULL*/
-		sh_free_command(cmd);
-		return NULL;
-	}
-
-	if (!strcmp("&", cmd->argv[i - 1])) {
+	if (i && !strcmp("&", cmd->argv[i - 1])) {
 		cmd->bg = 1;
 		--i; /* overwrite "&" token with NULL */
 	}
 
 	cmd->argv[i] = NULL;
+
+	if (i == 0) {
+		/* no tokens: cleanup and return NULL*/
+		sh_free_command(cmd);
+		return NULL;
+	}
 
 	return cmd;
 }

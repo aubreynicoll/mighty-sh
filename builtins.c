@@ -13,12 +13,12 @@ struct builtin_desc_s {
 	builtin_t f;
 };
 
-static void sh_cd(char **args);
-static void sh_jobs(char **args);
-static void sh_fg(char **args);
-static void sh_bg(char **args);
-static void sh_help(char **args);
-static void sh_exit(char **args);
+static void	     sh_cd(char **args);
+static void	     sh_jobs(char **args);
+static void	     sh_fg(char **args);
+static void	     sh_bg(char **args);
+static void	     sh_help(char **args);
+noreturn static void sh_exit(char **args);
 
 static builtin_desc_t builtins[] = {
     {.name = "cd", .f = &sh_cd},     {.name = "jobs", .f = &sh_jobs},

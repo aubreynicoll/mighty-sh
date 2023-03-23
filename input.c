@@ -3,6 +3,8 @@
 #include "error.h"
 #include "libc.h"
 
+#define SH_LINE_PROMPT "mighty-shell> "
+
 void sh_print_prompt(void) {
 	printf(SH_LINE_PROMPT);
 	fflush(stdout);
@@ -16,7 +18,6 @@ char *sh_read_line(void) {
 	status = getline(&line, &len, stdin);
 	if (status == -1) {
 		if (feof(stdin)) {
-			free(line);
 			printf("\nexit\n");
 			exit(EXIT_SUCCESS);
 		}
