@@ -16,6 +16,7 @@ char *sh_read_line(void) {
 	status = getline(&line, &len, stdin);
 	if (status == -1) {
 		if (feof(stdin)) {
+			free(line);
 			printf("\nexit\n");
 			exit(EXIT_SUCCESS);
 		}

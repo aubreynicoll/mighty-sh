@@ -29,6 +29,17 @@ command_t *sh_new_command(char *line) {
 		token = strtok(NULL, SH_TOK_DELIMITERS);
 	}
 
+	if (i == 0) {
+		/* no tokens: cleanup and return NULL*/
+		sh_free_command(cmd);
+		return NULL;
+	}
+
+	if (!strcmp("&", cmd->argv[i - 1])) {
+		cmd->bg = 1;
+		--i; /* overwrite "&" token with NULL */
+	}
+
 	cmd->argv[i] = NULL;
 
 	return cmd;
