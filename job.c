@@ -1,11 +1,11 @@
 #include "job.h"
 
-#include <sys/wait.h>
-
 #include "config.h"
 #include "error.h"
+#include "libc.h"
 #include "logger.h"
 #include "parser.h"
+#include "signal.h"
 #include "wrapped.h"
 
 #define MAXJOBS 16
@@ -62,6 +62,57 @@ job_t *sh_find_job_pid(pid_t pid) {
 	}
 
 	return NULL;
+}
+
+void sh_launch_job(job_t *job) {
+	if (job->status != NOT_STARTED) {
+		sh_fatal_error("%s: job already launched\n",
+			       sh_config.shell_name);
+	}
+
+	pid_t pid = sh_fork();
+	if (pid == 0) {
+		// child
+		if (sh_config.shell_is_interactive) {
+			sh_setpgid(0, 0);
+			if (!job->cmd->bg) {
+				sh_tcsetpgrp(sh_config.shell_terminal,
+					     getpid());
+			}
+
+			/* child process must NOT inherit the shell's SIG_IGN's
+			 */
+			sh_sig_dfl_all(SIGINT, SIGQUIT, SIGTSTP, SIGTTIN,
+				       SIGTTOU);
+		}
+
+		sh_execvp(job->cmd->argv[0], job->cmd->argv);
+	} else {
+		// parent
+		job->pid = pid;
+		job->status = RUNNING;
+
+		if (sh_config.shell_is_interactive) {
+			/* according to Kerrisk and GNU libc manual, parent
+			 * should also attempt to set child's pgid. Here we
+			 * allow for EACCES errors, as this occurs if the child
+			 * has already set the pgid */
+			if (setpgid(pid, 0) < 0 && errno != EACCES) {
+				sh_fatal_unix_error(NULL);
+			}
+			job->pgid = pid;
+		} else {
+			job->pgid = sh_config.shell_pgid;
+		}
+
+		if (!sh_config.shell_is_interactive) {
+			sh_wait_for_job(job);
+		} else if (!job->cmd->bg) {
+			sh_move_job_fg(job, 0);
+		} else {
+			sh_move_job_bg(job, 0);
+		}
+	}
 }
 
 void sh_wait_for_job(job_t *job) {
