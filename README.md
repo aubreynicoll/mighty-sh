@@ -14,7 +14,7 @@ Also, I'm not shooting for complete POSIX compliance or anything like that. Keep
 - [x] read a simple command, launch a foreground job to completion
 - [x] implement job control
 - [x] launch job to background (e.g. '\<cmd> \<args> &')
-- [ ] run scripts (non-interactive shell)
+- [x] run scripts (non-interactive shell)
 - [ ] export variables to the environment (export builtin)
 - [ ] pipes
 - [ ] basic I/O redirection ('>', '>>', '<', but no here documents)

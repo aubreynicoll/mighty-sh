@@ -80,3 +80,27 @@ pid_t sh_waitpid(pid_t pid, int *wstatus, int options) {
 	}
 	return ret;
 }
+
+int sh_open(const char *path, int flags) {
+	int ret = open(path, flags);
+	if (ret < 0) {
+		sh_fatal_unix_error("open");
+	}
+	return ret;
+}
+
+int sh_close(int fd) {
+	int ret = close(fd);
+	if (ret < 0) {
+		sh_fatal_unix_error("close");
+	}
+	return ret;
+}
+
+int sh_dup2(int oldfd, int newfd) {
+	int ret = dup2(oldfd, newfd);
+	if (ret < 0) {
+		sh_fatal_unix_error("dup2");
+	}
+	return ret;
+}

@@ -42,7 +42,10 @@ static void sh_evaluate(command_t *cmd) {
 void sh_repl(void) {
 	for (;;) {
 		sh_do_job_notifications();
-		sh_print_prompt();
+
+		if (sh_config.shell_is_interactive) {
+			sh_print_prompt();
+		}
 
 		char	  *line = sh_read_line();
 		command_t *cmd = sh_new_command(line);
