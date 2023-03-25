@@ -1,5 +1,6 @@
 #include "input.h"
 
+#include "config.h"
 #include "error.h"
 #include "libc.h"
 
@@ -17,11 +18,15 @@ char *sh_read_line(void) {
 
 	status = getline(&line, &len, stdin);
 	if (status == -1) {
+		/* perform normal exit on EOF */
 		if (feof(stdin)) {
-			printf("\nexit\n");
+			if (sh_config.shell_is_interactive) {
+				printf("\nexit\n");
+			}
 			exit(EXIT_SUCCESS);
 		}
 
+		/* a real error occurred */
 		sh_fatal_unix_error(NULL);
 	}
 

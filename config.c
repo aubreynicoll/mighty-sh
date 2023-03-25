@@ -10,6 +10,17 @@ config_t sh_config;
 
 void sh_init_config(int argc unused, char **argv) {
 	sh_config.shell_name = argv[0];
+
+	/* handle input file */
+	if (argc > 1) {
+		/* if a filename has been passed, we redirect STDIN to read from
+		 * that file */
+		char *path = argv[1];
+		int   fd = sh_open(path, O_RDONLY);
+		sh_dup2(fd, STDIN_FILENO);
+		sh_close(fd);
+	}
+
 	sh_config.shell_pgid = getpgrp(); /* assigned pgid */
 	sh_config.shell_terminal = STDIN_FILENO;
 	sh_config.shell_is_interactive = isatty(sh_config.shell_terminal);

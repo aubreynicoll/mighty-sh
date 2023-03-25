@@ -34,4 +34,9 @@ noreturn int sh_execvp(const char *file, char *const argv[]);
  */
 pid_t sh_waitpid(pid_t pid, int *wstatus, int options);
 
+int sh_open(const char *path, int flags);
+int sh_close(int fd);
+
+int sh_dup2(int oldfd, int newfd);
+
 #endif
