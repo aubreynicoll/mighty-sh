@@ -104,3 +104,11 @@ int sh_dup2(int oldfd, int newfd) {
 	}
 	return ret;
 }
+
+int sh_setenv(char *key, char *value, int overwrite) {
+	int ret = setenv(key, value, overwrite);
+	if (ret < 0) {
+		sh_fatal_unix_error("setenv");
+	}
+	return ret;
+}

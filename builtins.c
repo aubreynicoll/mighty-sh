@@ -4,8 +4,12 @@
 #include "input.h"
 #include "job.h"
 #include "libc.h"
+#include "mem.h"
 #include "repl.h"
 #include "util.h"
+#include "wrapped.h"
+
+#define SH_KEYVAL_DELIMS "="
 
 typedef struct builtin_desc_s builtin_desc_t;
 struct builtin_desc_s {
@@ -14,6 +18,7 @@ struct builtin_desc_s {
 };
 
 static void	     sh_cd(char **args);
+static void	     sh_export(char **args);
 static void	     sh_jobs(char **args);
 static void	     sh_fg(char **args);
 static void	     sh_bg(char **args);
@@ -21,10 +26,10 @@ static void	     sh_help(char **args);
 noreturn static void sh_exit(char **args);
 
 static builtin_desc_t builtins[] = {
-    {.name = "cd", .f = &sh_cd},     {.name = "jobs", .f = &sh_jobs},
-    {.name = "fg", .f = &sh_fg},     {.name = "bg", .f = &sh_bg},
-    {.name = "help", .f = &sh_help}, {.name = "exit", .f = &sh_exit},
-    {.name = NULL, .f = NULL}};
+    {.name = "cd", .f = &sh_cd},     {.name = "export", .f = &sh_export},
+    {.name = "jobs", .f = &sh_jobs}, {.name = "fg", .f = &sh_fg},
+    {.name = "bg", .f = &sh_bg},     {.name = "help", .f = &sh_help},
+    {.name = "exit", .f = &sh_exit}, {.name = NULL, .f = NULL}};
 
 static void sh_cd(char **args) {
 	char *dir = args[1];
@@ -35,6 +40,25 @@ static void sh_cd(char **args) {
 	int status = chdir(dir);
 	if (status < 0) {
 		sh_unix_error("cd");
+	}
+}
+
+static void sh_export(char **args) {
+	for (char **var = &args[1]; *var; ++var) {
+		/* copy so we don't mangle args */
+		char *dup = sh_strdup(*var);
+
+		/* extract key & value*/
+		char *key = strtok(dup, SH_KEYVAL_DELIMS);
+		char *value = strtok(NULL, SH_KEYVAL_DELIMS);
+
+		/* if value is NULL, set to empty string */
+		value = value ? value : "";
+
+		sh_setenv(key, value, 1);
+
+		/* free copied string*/
+		sh_free(dup);
 	}
 }
 
