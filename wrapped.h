@@ -39,4 +39,6 @@ int sh_close(int fd);
 
 int sh_dup2(int oldfd, int newfd);
 
+int sh_setenv(char *key, char *value, int overwrite);
+
 #endif
