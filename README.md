@@ -15,7 +15,7 @@ Also, I'm not shooting for complete POSIX compliance or anything like that. Keep
 - [x] implement job control
 - [x] launch job to background (e.g. '\<cmd> \<args> &')
 - [x] run scripts (non-interactive shell)
-- [ ] export variables to the environment (export builtin)
+- [x] export variables to the environment (export builtin)
 - [ ] pipes
 - [ ] basic I/O redirection ('>', '>>', '<', but no here documents)
 - [ ] advanced I/O fd duplication (e.g. '2>&1')
